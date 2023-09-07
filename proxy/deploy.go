@@ -167,9 +167,18 @@ func (c *Client) deploy(context context.Context, spec *DeployFunctionSpec, updat
 
 	switch res.StatusCode {
 	case http.StatusOK, http.StatusCreated, http.StatusAccepted:
+		bodyBytes, err := io.ReadAll(res.Body)
+		if err != nil {
+			deployOutput += fmt.Sprintf("Werid! Deployed succeed but read response body failed %s\n", err)
+			break
+		}
 		deployOutput += fmt.Sprintf("Deployed. %s.\n", res.Status)
 
-		deployedURL := fmt.Sprintf("URL: %s/function/%s", c.GatewayURL.String(), generateFuncStr(spec))
+		funcStr := string(bodyBytes)
+		if len(funcStr) == 0 {
+			funcStr = generateFuncStr(spec)
+		}
+		deployedURL := fmt.Sprintf("URL: %s/function/%s", c.GatewayURL.String(), funcStr)
 		deployOutput += fmt.Sprintln(deployedURL)
 	case http.StatusUnauthorized:
 		deployOutput += fmt.Sprintln("unauthorized access, run \"faas-cli login\" to setup authentication for this server")
