@@ -64,13 +64,14 @@ func (c *Client) DeployFunction(context context.Context, spec *DeployFunctionSpe
 
 	rollingUpdateInfo := fmt.Sprintf("Function %s already exists, attempting rolling-update.", spec.FunctionName)
 	statusCode, deployOutput := c.deploy(context, spec, spec.Update)
+	if spec.Update == true {
+		if statusCode == http.StatusNotFound {
+			// Re-run the function with update=false
 
-	if spec.Update == true && statusCode == http.StatusNotFound {
-		// Re-run the function with update=false
-
-		statusCode, deployOutput = c.deploy(context, spec, false)
-	} else if statusCode == http.StatusOK {
-		fmt.Println(rollingUpdateInfo)
+			statusCode, deployOutput = c.deploy(context, spec, false)
+		} else if statusCode == http.StatusOK {
+			fmt.Println(rollingUpdateInfo)
+		}
 	}
 	fmt.Println()
 	fmt.Println(deployOutput)

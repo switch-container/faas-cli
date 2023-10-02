@@ -184,7 +184,7 @@ github.com/opencontainers/go-digest
 ## explicit; go 1.18
 github.com/opencontainers/image-spec/specs-go
 github.com/opencontainers/image-spec/specs-go/v1
-# github.com/openfaas/faas-provider v0.24.2
+# github.com/openfaas/faas-provider v0.24.2 => ../faas-provider/
 ## explicit; go 1.20
 github.com/openfaas/faas-provider/httputil
 github.com/openfaas/faas-provider/logs
@@ -255,3 +255,4 @@ gopkg.in/warnings.v0
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3
+# github.com/openfaas/faas-provider => ../faas-provider/

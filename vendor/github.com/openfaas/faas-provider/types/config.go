@@ -48,6 +48,14 @@ type FaaSHandlers struct {
 	Health http.HandlerFunc
 
 	Info http.HandlerFunc
+
+	ListCheckpoint http.HandlerFunc
+
+	RegisterFunction http.HandlerFunc
+
+	InvokeFunction http.HandlerFunc
+
+	MetricFunction http.HandlerFunc
 }
 
 // FaaSConfig set config for HTTP handlers
