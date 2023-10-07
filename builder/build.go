@@ -16,6 +16,7 @@ import (
 	"path"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 
 	v1execute "github.com/alexellis/go-execute/pkg/v1"
@@ -27,10 +28,11 @@ import (
 // AdditionalPackageBuildArg holds the special build-arg keyname for use with build-opts.
 // Can also be passed as a build arg hence needs to be accessed from commands
 const AdditionalPackageBuildArg = "ADDITIONAL_PACKAGE"
+const UpstreamPortBuildArg = "UPSTREAM_PORT"
 
 // BuildImage construct Docker image from function parameters
 // TODO: refactor signature to a struct to simplify the length of the method header
-func BuildImage(image string, handler string, functionName string, language string, nocache bool, squash bool, shrinkwrap bool, buildArgMap map[string]string, buildOptions []string, tagFormat schema.BuildFormat, buildLabelMap map[string]string, quietBuild bool, copyExtraPaths []string, remoteBuilder, payloadSecretPath string) error {
+func BuildImage(image string, handler string, functionName string, language string, port int, nocache bool, squash bool, shrinkwrap bool, buildArgMap map[string]string, buildOptions []string, tagFormat schema.BuildFormat, buildLabelMap map[string]string, quietBuild bool, copyExtraPaths []string, remoteBuilder, payloadSecretPath string) error {
 
 	if stack.IsValidTemplate(language) {
 		pathToTemplateYAML := fmt.Sprintf("./template/%s/template.yml", language)
@@ -114,7 +116,10 @@ func BuildImage(image string, handler string, functionName string, language stri
 			buildOptPackages, err := getBuildOptionPackages(buildOptions, language, langTemplate.BuildOptions)
 			if err != nil {
 				return err
+			}
 
+			if langTemplate.EnablePort && port > 0 && buildArgMap != nil {
+				buildArgMap[UpstreamPortBuildArg] = strconv.Itoa(port)
 			}
 
 			dockerBuildVal := dockerBuild{

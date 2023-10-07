@@ -65,6 +65,8 @@ type Function struct {
 
 	// BuildSecrets is a set of secrets to mount with buildkit
 	BuildSecrets map[string]string `yaml:"build_secrets,omitempty"`
+
+	Port int `yaml:"port,omitempty"`
 }
 
 // Configuration for the stack.yml file
@@ -124,6 +126,8 @@ type LanguageTemplate struct {
 	HandlerFolder string `yaml:"handler_folder,omitempty"`
 
 	MountSSH bool `yaml:"mount_ssh,omitempty"`
+
+  EnablePort bool `yaml:"enable_port,omitempty"`
 }
 
 // BuildOption a named build option for one or more packages
