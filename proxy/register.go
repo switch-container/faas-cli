@@ -37,6 +37,7 @@ func (c *Client) RegisterFunction(context context.Context, spec *DeployFunctionS
 		Annotations:            &spec.Annotations,
 		ReadOnlyRootFilesystem: spec.ReadOnlyRootFilesystem,
 		Namespace:              spec.Namespace,
+		Language:               spec.Language,
 	}
 
 	hasLimits := false
